@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "extension-traefik.fullname" . }}
+  labels:
+    {{- include "extension-traefik.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "extension-traefik.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name:  {{ include "extension-traefik.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}

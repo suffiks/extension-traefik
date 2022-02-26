@@ -1,0 +1,31 @@
+apiVersion: suffiks.com/v1
+kind: Extension
+metadata:
+  creationTimestamp: null
+  name: traefik
+spec:
+  controller:
+    namespace: ""
+    port: 0
+    service: ""
+  openAPIV3Schema:
+    properties:
+      ingresses:
+        items:
+          properties:
+            host:
+              type: string
+            paths:
+              items:
+                type: string
+              type: array
+          required:
+            - host
+          type: object
+        type: array
+    type: object
+  targets:
+    - Application
+  webhooks:
+    validation: true
+status: {}

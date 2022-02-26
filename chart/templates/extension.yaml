@@ -1,0 +1,31 @@
+apiVersion: suffiks.com/v1
+kind: Extension
+metadata:
+  name: {{ include "extension-traefik.fullname" . }}
+  labels:
+    {{- include "extension-traefik.labels" . | nindent 4 }}
+spec:
+  controller:
+    namespace: {{ .Release.Namespace }}
+    port: {{ .Values.service.port }}
+    service: {{ include "extension-traefik.fullname" . }}
+  openAPIV3Schema:
+    properties:
+      ingresses:
+        items:
+          properties:
+            host:
+              type: string
+            paths:
+              items:
+                type: string
+              type: array
+          required:
+            - host
+          type: object
+        type: array
+    type: object
+  targets:
+    - Application
+  webhooks:
+    validation: true

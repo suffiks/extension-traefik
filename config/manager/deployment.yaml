@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "traefik"
+  namespace: system
+  labels:
+    extension: "traefik"
+spec:
+  selector:
+    matchLabels:
+      extension: "traefik"
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: extension
+      labels:
+        extension: "traefik"
+    spec:
+      containers:
+        - name: extension
+          image: "github.com/suffiks/extensions/traefik"
+          imagePullPolicy: Never
+      serviceAccountName: "traefik"
+      terminationGracePeriodSeconds: 10

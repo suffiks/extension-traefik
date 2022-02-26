@@ -1,0 +1,9 @@
+apiVersion: suffiks.com/v1
+kind: Extension
+metadata:
+  name: "traefik"
+spec:
+  controller:
+    namespace: system
+    service: "traefik"
+    port: 4269
