@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/suffiks/suffiks/extension"
 	traefikcrd "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	treafikv1alpha1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/traefik/v1alpha1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 var (
@@ -24,6 +26,7 @@ type TraefikExtension struct {
 }
 
 func (t *TraefikExtension) Sync(ctx context.Context, owner extension.Owner, obj *Traefik, rw *extension.ResponseWriter) error {
+	fmt.Println("Sync")
 	irclient := t.Traefik.TraefikV1alpha1().IngressRoutes(owner.Namespace())
 	exists := true
 
@@ -54,6 +57,7 @@ func (t *TraefikExtension) Sync(ctx context.Context, owner extension.Owner, obj 
 						LoadBalancerSpec: treafikv1alpha1.LoadBalancerSpec{
 							Name:      owner.Name(),
 							Namespace: owner.Namespace(),
+							Port:      intstr.FromString("http"),
 						},
 					},
 				},
@@ -70,6 +74,7 @@ func (t *TraefikExtension) Sync(ctx context.Context, owner extension.Owner, obj 
 }
 
 func (t *TraefikExtension) Delete(ctx context.Context, owner extension.Owner, obj *Traefik) error {
+	fmt.Println("Delete")
 	irclient := t.Traefik.TraefikV1alpha1().IngressRoutes(owner.Namespace())
 	err := irclient.Delete(ctx, owner.Name(), metav1.DeleteOptions{})
 	if errors.IsNotFound(err) {

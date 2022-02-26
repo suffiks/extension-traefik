@@ -12,6 +12,7 @@ import (
 	treafikv1alpha1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/traefik/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/kubernetes/fake"
 )
@@ -57,6 +58,7 @@ func TestTraefik(t *testing.T) {
 										LoadBalancerSpec: treafikv1alpha1.LoadBalancerSpec{
 											Name:      "some-app",
 											Namespace: "mynamespace",
+											Port:      intstr.IntOrString{Type: intstr.String, StrVal: "http"},
 										},
 									},
 								},

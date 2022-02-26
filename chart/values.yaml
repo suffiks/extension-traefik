@@ -15,7 +15,7 @@ environment:
 
 image:
   repository: ghcr.io/suffiks/extension-traefik
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -52,11 +52,11 @@ service:
 
 resources:
   limits:
-    cpu: 50m
-    memory: 64Mi
-  requests:
     cpu: 100m
     memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
 
 autoscaling:
   enabled: false
