@@ -1,4 +1,4 @@
-module github.com/suffiks/extensions/traefik
+module github.com/suffiks/extension-traefik
 
 go 1.18
 

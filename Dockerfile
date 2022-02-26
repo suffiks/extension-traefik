@@ -1,5 +1,7 @@
 FROM golang:1.18rc1-alpine as builder
 
+RUN apk add --no-cache git
+
 WORKDIR /workspace
 COPY go.mod go.mod
 COPY go.sum go.sum
@@ -8,7 +10,7 @@ RUN go mod download
 COPY . /workspace
 
 # Build
-RUN go build -a -o traefik ./cmd/traefik
+RUN CGO_ENABLED=0 go build -a -o traefik ./cmd/traefik
 
 FROM alpine
 WORKDIR /

@@ -12,7 +12,7 @@ import (
 	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
-	"github.com/suffiks/extensions/traefik/controllers"
+	"github.com/suffiks/extension-traefik/controllers"
 	"github.com/suffiks/suffiks/extension"
 	"github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	"k8s.io/client-go/rest"

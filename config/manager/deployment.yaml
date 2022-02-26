@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: extension
-          image: "github.com/suffiks/extensions/traefik"
+          image: "github.com/suffiks/extension-traefik"
           imagePullPolicy: Never
       serviceAccountName: "traefik"
       terminationGracePeriodSeconds: 10

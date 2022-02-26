@@ -3,8 +3,8 @@ generate:
 	../../testerator/cmd/extgen/extgen rbac -name traefik-extension
 
 docker:
-	docker build -t github.com/suffiks/extensions/traefik:latest .
+	docker build -t github.com/suffiks/extension-traefik:latest .
 
 kind: docker
-	kind load docker-image github.com/suffiks/extensions/traefik:latest
+	kind load docker-image github.com/suffiks/extension-traefik:latest
 	kubectl apply -k config
