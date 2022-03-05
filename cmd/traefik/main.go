@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -14,38 +14,49 @@ import (
 
 	"github.com/suffiks/extension-traefik/controllers"
 	"github.com/suffiks/suffiks/extension"
-	"github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	"k8s.io/client-go/rest"
+
+	// This package requires a lot of replacements in go.mod to work.
+	// Might be worth looking into another way to do this.
+	"github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 )
 
+var configFile string
+
+func init() {
+	flag.StringVar(&configFile, "config-file", "", "path to config file")
+}
+
 func main() {
+	flag.Parse()
+
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func run() error {
-	config, err := rest.InClusterConfig()
+	k8sConfig, err := rest.InClusterConfig()
 	if err != nil {
 		return err
 	}
-	client, err := versioned.NewForConfig(config)
+	client, err := versioned.NewForConfig(k8sConfig)
 	if err != nil {
 		return err
 	}
 
-	var domains []string
-	if d := os.Getenv("ALLOWED_DOMAINS"); d != "" {
-		domains = strings.Split(d, ",")
+	config := &controllers.Config{}
+	if err := extension.ReadConfig(configFile, config); err != nil {
+		return err
 	}
 
 	ext := &controllers.TraefikExtension{
 		Traefik:        client,
-		AllowedDomains: domains,
+		AllowedDomains: config.AllowedDomains,
 	}
 
 	fmt.Println("Listening on :4269")
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	return extension.Serve[*controllers.Traefik](ctx, ":4269", ext)
+	return extension.Serve[*controllers.Traefik](ctx, config, ext)
 }
