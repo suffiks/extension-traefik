@@ -51,9 +51,10 @@ func run() error {
 	}
 
 	ext := &controllers.TraefikExtension{
-		Traefik:        client,
-		AllowedDomains: config.AllowedDomains,
+		Traefik: client,
 	}
+
+	ext.AddAllowedDomains(config.AllowedDomains)
 
 	fmt.Println("Listening on :4269")
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)

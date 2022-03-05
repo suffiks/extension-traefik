@@ -22,7 +22,7 @@ var (
 type TraefikExtension struct {
 	Traefik traefikcrd.Interface
 
-	AllowedDomains []string
+	allowedDomains *tree
 }
 
 func (t *TraefikExtension) Sync(ctx context.Context, owner extension.Owner, obj *Traefik, rw *extension.ResponseWriter) error {
@@ -88,11 +88,33 @@ func (t *TraefikExtension) Validate(ctx context.Context, typ extension.Validatio
 		return nil, nil
 	}
 
-	if len(t.AllowedDomains) == 0 {
+	if t.allowedDomains == nil {
 		return nil, nil
 	}
 
 	var errs []extension.ValidationErrors
+	for _, rule := range newObj.Ingresses {
+		if !t.allowedDomains.Contains(rule.Host) {
+			errs = append(errs, extension.ValidationErrors{
+				Path:   "ingresses.host",
+				Value:  string(rule.Host),
+				Detail: fmt.Sprintf("Host %s is not allowed", rule.Host),
+			})
+		}
+	}
 
 	return errs, nil
+}
+
+func (t *TraefikExtension) AddAllowedDomains(domains []string) {
+	if len(domains) == 0 {
+		return
+	}
+
+	t.allowedDomains = &tree{
+		node: make(node),
+	}
+	for _, domain := range domains {
+		t.allowedDomains.Add(domain)
+	}
 }

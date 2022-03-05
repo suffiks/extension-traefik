@@ -42,17 +42,17 @@ func (n node) print(indenter string, indents int) {
 	}
 }
 
-type Tree struct {
+type tree struct {
 	node node
 }
 
-func (t *Tree) Add(host string) {
+func (t *tree) Add(host string) {
 	parts := strings.Split(host, ".")
 	reverse(parts)
 	t.node.add(parts)
 }
 
-func (t *Tree) Contains(host Host) bool {
+func (t *tree) Contains(host Host) bool {
 	if t.node == nil {
 		return false
 	}
@@ -62,7 +62,7 @@ func (t *Tree) Contains(host Host) bool {
 	return t.node.contains(parts)
 }
 
-func (t *Tree) print() {
+func (t *tree) print() {
 	t.node.print("  ", 0)
 }
 

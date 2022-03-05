@@ -57,7 +57,7 @@ func TestTree(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			tree := &Tree{
+			tree := &tree{
 				node: make(node),
 			}
 			for _, host := range test.hosts {
