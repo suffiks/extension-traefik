@@ -83,7 +83,7 @@ func TestTraefik(t *testing.T) {
 		},
 	}
 
-	f, err := os.OpenFile("../config/crd/traefik.yaml", os.O_RDONLY, 0644)
+	f, err := os.OpenFile("../config/crd/traefik.yaml", os.O_RDONLY, 0o644)
 	if err != nil {
 		t.Fatal(err)
 	}

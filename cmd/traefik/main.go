@@ -56,7 +56,7 @@ func run() error {
 
 	ext.AddAllowedDomains(config.AllowedDomains)
 
-	fmt.Println("Listening on :4269")
+	fmt.Println("Listening on", config.ListenAddress)
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 	return extension.Serve[*controllers.Traefik](ctx, config, ext)
