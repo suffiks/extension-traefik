@@ -59,5 +59,5 @@ func run() error {
 	fmt.Println("Listening on", config.ListenAddress)
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	return extension.Serve[*controllers.Traefik](ctx, config, ext)
+	return extension.Serve[*controllers.Traefik](ctx, config, ext, os.DirFS("./docs"))
 }

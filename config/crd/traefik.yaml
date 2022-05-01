@@ -20,12 +20,12 @@ spec:
                 type: string
               type: array
           required:
-            - host
+          - host
           type: object
         type: array
     type: object
   targets:
-    - Application
+  - Application
   webhooks:
     validation: true
 status: {}

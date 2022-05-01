@@ -1,4 +1,4 @@
-FROM golang:1.18rc1-alpine as builder
+FROM golang:1.18.1-alpine as builder
 
 RUN apk add --no-cache git
 
@@ -15,6 +15,7 @@ RUN CGO_ENABLED=0 go build -a -o traefik ./cmd/traefik
 FROM alpine
 WORKDIR /
 COPY --from=builder /workspace/traefik .
+COPY ./docs/ ./docs/
 USER 65532:65532
 
 ENTRYPOINT ["/traefik"]
