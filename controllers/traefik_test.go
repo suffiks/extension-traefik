@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/suffiks/suffiks/base"
+	v1 "github.com/suffiks/suffiks/apis/suffiks/v1"
 	"github.com/suffiks/suffiks/extension"
 	"github.com/suffiks/suffiks/extension/testutil"
 	traefikv1alpha1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned/typed/traefik/v1alpha1"
@@ -18,12 +18,12 @@ import (
 )
 
 func TestTraefik(t *testing.T) {
-	app := &base.Application{
+	app := &v1.Application{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "some-app",
 			Namespace: "mynamespace",
 		},
-		Spec: testutil.AppSpec(map[string]any{
+		Spec: testutil.AppSpec(nil, map[string]any{
 			"ingresses": []map[string]any{
 				{
 					"host": "mydomain.org",
@@ -103,7 +103,7 @@ type fakeWrap struct {
 }
 
 func (f *fakeWrap) Discovery() discovery.DiscoveryInterface {
-	return f.Discovery()
+	return nil
 }
 
 func (f *fakeWrap) TraefikV1alpha1() traefikv1alpha1.TraefikV1alpha1Interface {

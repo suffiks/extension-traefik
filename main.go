@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"embed"
 	"flag"
 	"fmt"
 	"log"
@@ -22,6 +23,9 @@ import (
 )
 
 var configFile string
+
+//go:embed docs/*.md
+var docs embed.FS
 
 func init() {
 	flag.StringVar(&configFile, "config-file", "", "path to config file")
@@ -50,6 +54,11 @@ func run() error {
 		return err
 	}
 
+	docs := &extension.Documentation{
+		FS:   docs,
+		Root: "docs",
+	}
+
 	ext := &controllers.TraefikExtension{
 		Traefik: client,
 	}
@@ -59,5 +68,5 @@ func run() error {
 	fmt.Println("Listening on", config.ListenAddress)
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	return extension.Serve[*controllers.Traefik](ctx, config, ext)
+	return extension.Serve[*controllers.Traefik](ctx, config, ext, docs)
 }

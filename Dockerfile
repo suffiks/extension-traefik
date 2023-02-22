@@ -1,4 +1,4 @@
-FROM golang:1.18rc1-alpine as builder
+FROM golang:1.20-alpine as builder
 
 RUN apk add --no-cache git
 
@@ -10,7 +10,7 @@ RUN go mod download
 COPY . /workspace
 
 # Build
-RUN CGO_ENABLED=0 go build -a -o traefik ./cmd/traefik
+RUN CGO_ENABLED=0 go build -a -o traefik ./
 
 FROM alpine
 WORKDIR /
